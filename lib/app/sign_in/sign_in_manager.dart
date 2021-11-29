@@ -1,28 +1,19 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:time_tracker_flutter_course/app/services/auth.dart';
 
-class SignInBloc {
-  SignInBloc({required this.auth});
+class SignInManager {
+  SignInManager({required this.auth, required this.isLoading});
   final AuthBase auth;
-
-  final StreamController<bool> _isLoadingController = StreamController<bool>();
-
-  Stream<bool> get isLoadingStream => _isLoadingController.stream;
-
-  void dispose() {
-    // sign inページがwidget treeから削除されたときにコントローラをクローズする
-    _isLoadingController.close();
-  }
-
-  void _setIsLoading(bool isLoading) => _isLoadingController.add(isLoading);
+  final ValueNotifier<bool> isLoading;
 
   Future<User?> _signIn(Future<User?> Function() signInMethod) async {
     try {
-      _setIsLoading(true);
+      isLoading.value = true;
       return await signInMethod();
     } catch (e) {
-      _setIsLoading(false);
+      isLoading.value = false;
       // a way of forwarding the  exception to the calling code
       rethrow;
     }
