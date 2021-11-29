@@ -45,19 +45,23 @@ class EmailSignInModel with EmailAndPasswordValidators {
     return showErrorText ? invalidEmailErrorText : null;
   }
 
-  Future<EmailSignInModel> copyWith({
+  EmailSignInModel copyWith({
     String? email,
     String? password,
     EmailSignInFormType? formType,
     bool? isLoading,
     bool? submitted,
-  }) async {
+  }) {
     return EmailSignInModel(
-      email: (email != null) ? email : this.email,
-      password: (password != null) ? password : this.password,
-      formType: (formType != null) ? formType : this.formType,
-      isLoading: (isLoading != null) ? isLoading : this.isLoading,
-      submitted: (submitted != null) ? submitted : this.submitted,
+      email: email ?? this.email, // (email != null) ? email : this.email,
+      password: password ??
+          this.password, // (password != null) ? password : this.password,
+      formType: formType ??
+          this.formType, // (formType != null) ? formType : this.formType,
+      isLoading: isLoading ??
+          this.isLoading, // (isLoading != null) ? isLoading : this.isLoading,
+      submitted: submitted ??
+          this.submitted, // (submitted != null) ? submitted : this.submitted,
     );
   }
 }

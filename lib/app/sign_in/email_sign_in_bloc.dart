@@ -68,7 +68,7 @@ class EmailSignInBloc {
       formType: formType,
       isLoading: isLoading,
       submitted: submitted,
-    ) as EmailSignInModel;
+    );
     // add update model to _modelController
     _modelController.add(_model);
   }
