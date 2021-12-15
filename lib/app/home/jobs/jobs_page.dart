@@ -1,12 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:time_tracker_flutter_course/app/home/jobs/job_list_tile.dart';
+import 'package:time_tracker_flutter_course/app/home/jobs/list_item_builder.dart';
 import 'package:time_tracker_flutter_course/app/services/auth.dart';
 import 'package:time_tracker_flutter_course/common_widgets/show_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/common_widgets/show_exception_alert_dialog.dart';
 
-import '../services/database.dart';
-import 'models/job.dart';
+import '../../services/database.dart';
+import '../models/job.dart';
+import 'edit_job_page.dart';
 
 class JobsPage extends StatelessWidget {
   const JobsPage({Key? key}) : super(key: key);
@@ -33,13 +37,10 @@ class JobsPage extends StatelessWidget {
     }
   }
 
-  Future<void> _createJob(BuildContext context) async {
+  Future<void> _delete(BuildContext context, Job job) async {
     try {
       final database = Provider.of<Database>(context, listen: false);
-      await database.createJob(Job(
-        name: 'Blogging',
-        ratePerHour: 10,
-      ));
+      await database.deleteJob(job);
     } on FirebaseException catch (e) {
       showExceptionAlertDialog(
         context,
@@ -70,7 +71,7 @@ class JobsPage extends StatelessWidget {
       body: _buildContents(context),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () => _createJob(context),
+        onPressed: () => EditJobPage.show(context),
       ),
     );
   }
@@ -80,28 +81,23 @@ class JobsPage extends StatelessWidget {
     return StreamBuilder<List<Job>>(
       stream: database.jobsStream(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final jobs = snapshot.data;
-          final children = jobs!
-              .map((job) => Text(
-                    job.name,
-                    style: const TextStyle(fontSize: 20),
-                  ))
-              .toList();
-          return ListView(children: children);
-        }
-        if (snapshot.hasError) {
-          return const Center(
-            child: Text(
-              'Some error occurred',
-              style: TextStyle(
-                fontSize: 40,
-                color: Colors.red,
-              ),
+        return ListItemBuilder<Job>(
+          snapshot: snapshot,
+          itemBuilder: (context, job) => Dismissible(
+            background: Container(
+              color: Colors.red.shade700,
+              alignment: Alignment.centerRight,
+              child: const Icon(CupertinoIcons.trash),
             ),
-          );
-        }
-        return const Center(child: CircularProgressIndicator());
+            direction: DismissDirection.endToStart,
+            onDismissed: (direction) => _delete(context, job),
+            key: Key('job-${job.id}'),
+            child: JobListTle(
+              job: job,
+              onTap: () => EditJobPage.show(context, job: job),
+            ),
+          ),
+        );
       },
     );
   }

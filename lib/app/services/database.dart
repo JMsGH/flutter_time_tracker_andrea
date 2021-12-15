@@ -3,9 +3,12 @@ import 'api_path.dart';
 import 'firestore_service.dart';
 
 abstract class Database {
-  Future<void> createJob(Job job);
+  Future<void> setJob(Job job);
+  Future<void> deleteJob(Job job);
   Stream<List<Job>> jobsStream();
 }
+
+String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
 
 class FirestoreDatabase implements Database {
   FirestoreDatabase({required this.uid});
@@ -13,13 +16,20 @@ class FirestoreDatabase implements Database {
 
   final _service = FirestoreService.instance;
 
-  Future<void> createJob(Job job) => _service.setData(
-        path: APIPath.job(uid, 'job_abc'),
+  @override
+  Future<void> setJob(Job job) async => _service.setData(
+        path: APIPath.job(uid, job.id),
         data: job.toMap(),
       );
 
+  @override
+  Future<void> deleteJob(Job job) async => _service.deleteData(
+        path: APIPath.job(uid, job.id),
+      );
+
+  @override
   Stream<List<Job>> jobsStream() => _service.collectionStream(
         path: APIPath.jobs(uid),
-        builder: (data) => Job.fromMap(data),
+        builder: (data, documentId) => Job.fromMap(data, documentId),
       );
 }
