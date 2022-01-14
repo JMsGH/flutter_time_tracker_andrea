@@ -6,14 +6,14 @@ class Entry {
     required this.jobId,
     required this.start,
     required this.end,
-    this.comment,
+    required this.comment,
   });
 
   String id;
   String jobId;
   DateTime start;
   DateTime end;
-  String? comment;
+  String comment;
 
   double get durationInHours =>
       end.difference(start).inMinutes.toDouble() / 60.0;
@@ -26,7 +26,7 @@ class Entry {
       jobId: value['jobId'],
       start: DateTime.fromMillisecondsSinceEpoch(startMilliseconds),
       end: DateTime.fromMillisecondsSinceEpoch(endMilliseconds),
-      comment: value['comment'],
+      comment: value['comment'] ?? '',
     );
   }
 

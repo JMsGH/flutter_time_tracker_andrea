@@ -5,8 +5,8 @@ class SocialSignInButton extends CustomElevatedButton {
   SocialSignInButton({
     required String text,
     required String assetName,
-    Color color = Colors.white,
-    Color textColor = Colors.black87,
+    Color? color,
+    Color? textColor,
     VoidCallback? onPressed,
   }) : super(
           child: Row(
@@ -28,6 +28,6 @@ class SocialSignInButton extends CustomElevatedButton {
           ),
           onPressed: onPressed,
           borderRadius: 10.0,
-          primaryColor: color,
+          primaryColor: color ?? Colors.white,
         );
 }

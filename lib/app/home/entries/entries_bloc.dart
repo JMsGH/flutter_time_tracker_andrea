@@ -1,5 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
+// Andreaのproject Null-safetyに従って firstWhereOrNull を追加したところ、The method 'firstWhereOrNull' isn't defined for the type 'List'.が消えなかったが、以下の1行を追加したら消えた
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:time_tracker_flutter_course/app/home/entries/daily_jobs_details.dart';
 import 'package:time_tracker_flutter_course/app/home/entries/entries_list_tile.dart';
 import 'package:time_tracker_flutter_course/app/home/entries/entry_job.dart';
@@ -23,12 +24,10 @@ class EntriesBloc {
   static List<EntryJob> _entriesJobsCombiner(
       List<Entry> entries, List<Job> jobs) {
     return entries.map((entry) {
-      final job = jobs.firstWhere(
+      final job = jobs.firstWhereOrNull(
         (job) => job.id == entry.jobId,
-        // 下のコードを入れているとエラーが出るのでとりあえずコメントアウト
-        // orElse: () => null,
       );
-      return EntryJob(entry, job);
+      return EntryJob(entry, job!);
     }).toList();
   }
 

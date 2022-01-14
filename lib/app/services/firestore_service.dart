@@ -47,7 +47,7 @@ class FirestoreService {
 
   Stream<T> documentStream<T>({
     required String path,
-    required T Function(Map<String, dynamic> data, String documentID) builder,
+    required T Function(Map<String, dynamic>? data, String documentID) builder,
   }) {
     final reference = FirebaseFirestore.instance.doc(path);
     final snapshots = reference.snapshots();

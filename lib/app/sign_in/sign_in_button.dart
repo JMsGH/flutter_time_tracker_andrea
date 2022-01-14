@@ -7,7 +7,9 @@ class SignInButton extends CustomElevatedButton {
     Color color = Colors.white,
     Color? textColor,
     VoidCallback? onPressed,
+    Key? key,
   }) : super(
+          key: key,
           child: Text(
             text,
             style: TextStyle(color: textColor, fontSize: 20.0),

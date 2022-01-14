@@ -4,14 +4,14 @@ class InputDropdown extends StatelessWidget {
   const InputDropdown({
     Key? key,
     this.labelText,
-    this.valueText,
-    this.valueStyle,
+    required this.valueText,
+    required this.valueStyle,
     this.onPressed,
   }) : super(key: key);
 
   final String? labelText;
-  final String? valueText;
-  final TextStyle? valueStyle;
+  final String valueText;
+  final TextStyle valueStyle;
   final VoidCallback? onPressed;
 
   @override
@@ -27,7 +27,7 @@ class InputDropdown extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(valueText!, style: valueStyle),
+            Text(valueText, style: valueStyle),
             Icon(Icons.arrow_drop_down,
                 color: Theme.of(context).brightness == Brightness.light
                     ? Colors.grey.shade700

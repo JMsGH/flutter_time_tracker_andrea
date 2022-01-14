@@ -47,8 +47,8 @@ class _EditJobPageState extends State<EditJobPage> {
   }
 
   bool _validateAndSaveForm() {
-    final form = _formKey.currentState;
-    if (form!.validate()) {
+    final form = _formKey.currentState!;
+    if (form.validate()) {
       form.save();
       return true;
     }
@@ -76,7 +76,8 @@ class _EditJobPageState extends State<EditJobPage> {
           );
         } else {
           final id = widget.job?.id ?? documentIdFromCurrentDate();
-          final job = Job(id: id, name: _name!, ratePerHour: _ratePerHour!);
+          final job =
+              Job(id: id, name: _name ?? '', ratePerHour: _ratePerHour ?? 0);
           await widget.database.setJob(job);
           Navigator.of(context).pop();
         }
@@ -162,10 +163,9 @@ class _EditJobPageState extends State<EditJobPage> {
           labelText: 'Job name',
           enabled: _isLoading == false,
         ),
-        validator: (value) => (value != null) && (value.isNotEmpty)
-            ? null
-            : 'Name can\'t be empty',
-        onSaved: (value) => _name = value!,
+        validator: (value) =>
+            (value ?? '').isNotEmpty ? null : 'Name can\'t be empty',
+        onSaved: (value) => _name = value,
         textInputAction: TextInputAction.next,
         onFieldSubmitted: (_) =>
             FocusScope.of(context).requestFocus(_ratePerHourFocusNode),
@@ -180,8 +180,7 @@ class _EditJobPageState extends State<EditJobPage> {
           signed: false,
           decimal: false,
         ),
-        onSaved: (value) => _ratePerHour =
-            ((value != null) && (value.isNotEmpty) ? int.tryParse(value) : 0)!,
+        onSaved: (value) => _ratePerHour = int.tryParse(value ?? '') ?? 0,
         focusNode: _ratePerHourFocusNode,
       ),
     ];

@@ -12,7 +12,7 @@ class EmailSignInBloc {
       BehaviorSubject<EmailSignInModel>.seeded(EmailSignInModel());
 
   Stream<EmailSignInModel> get modelStream => _modelSubject.stream;
-  EmailSignInModel _model = EmailSignInModel();
+  EmailSignInModel? get _model => _modelSubject.value;
 
   void dispose() {
     _modelSubject.close();
@@ -25,11 +25,11 @@ class EmailSignInBloc {
     );
 
     try {
-      if (_model.formType == EmailSignInFormType.signIn) {
-        await auth.signInWithEmailAndPassword(_model.email, _model.password);
+      if (_model!.formType == EmailSignInFormType.signIn) {
+        await auth.signInWithEmailAndPassword(_model!.email, _model!.password);
       } else {
         await auth.createUserWithEmailAndPassword(
-            _model.email, _model.password);
+            _model!.email, _model!.password);
       }
     } catch (e) {
       updateWith(
@@ -40,7 +40,7 @@ class EmailSignInBloc {
   }
 
   void toggleFormType() {
-    final formType = _model.formType == EmailSignInFormType.signIn
+    final formType = _model!.formType == EmailSignInFormType.signIn
         ? EmailSignInFormType.register
         : EmailSignInFormType.signIn;
     updateWith(
@@ -71,7 +71,7 @@ class EmailSignInBloc {
     //   isLoading: isLoading,
     //   submitted: submitted,
     //  上の代わりに以下を使える
-    _modelSubject.value = _model.copyWith(
+    _modelSubject.value = _model!.copyWith(
       email: email,
       password: password,
       formType: formType,

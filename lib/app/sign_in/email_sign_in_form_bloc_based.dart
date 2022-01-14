@@ -137,13 +137,13 @@ class _EmailSignInFormBlocBasedState extends State<EmailSignInFormBlocBased> {
         stream: widget.bloc.modelStream,
         initialData: EmailSignInModel(),
         builder: (context, snapshot) {
-          final EmailSignInModel? model = snapshot.data;
+          final EmailSignInModel model = snapshot.data!;
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
-              children: _buildChildren(model!),
+              children: _buildChildren(model),
             ),
           );
         });

@@ -15,8 +15,8 @@ class ListItemsBuilder<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (snapshot.hasData) {
-      final List<T>? items = snapshot.data;
-      if (items!.isNotEmpty) {
+      final List<T> items = snapshot.data!;
+      if (items.isNotEmpty) {
         return _buildList(items);
       } else {
         return const EmptyContent();

@@ -8,12 +8,12 @@ class EntryListItem extends StatelessWidget {
   const EntryListItem({
     required this.entry,
     required this.job,
-    required this.onTap,
+    this.onTap,
   });
 
   final Entry entry;
   final Job job;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +64,9 @@ class EntryListItem extends StatelessWidget {
           Expanded(child: Container()),
           Text(durationFormatted, style: const TextStyle(fontSize: 16.0)),
         ]),
-        if (entry.comment!.isNotEmpty)
+        if (entry.comment.isNotEmpty)
           Text(
-            entry.comment!,
+            entry.comment,
             style: const TextStyle(fontSize: 12.0),
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
@@ -78,16 +78,16 @@ class EntryListItem extends StatelessWidget {
 
 class DismissibleEntryListItem extends StatelessWidget {
   const DismissibleEntryListItem({
-    this.key,
-    this.entry,
-    this.job,
+    required this.dismissibleKey,
+    required this.entry,
+    required this.job,
     this.onDismissed,
     this.onTap,
   });
 
-  final Key? key;
-  final Entry? entry;
-  final Job? job;
+  final Key dismissibleKey;
+  final Entry entry;
+  final Job job;
   final VoidCallback? onDismissed;
   final VoidCallback? onTap;
 
@@ -101,13 +101,13 @@ class DismissibleEntryListItem extends StatelessWidget {
           CupertinoIcons.trash,
         ),
       ),
-      key: key!,
+      key: dismissibleKey,
       direction: DismissDirection.endToStart,
-      onDismissed: (direction) => onDismissed!(),
+      onDismissed: (direction) => onDismissed?.call(),
       child: EntryListItem(
-        entry: entry!,
-        job: job!,
-        onTap: onTap!,
+        entry: entry,
+        job: job,
+        onTap: onTap,
       ),
     );
   }

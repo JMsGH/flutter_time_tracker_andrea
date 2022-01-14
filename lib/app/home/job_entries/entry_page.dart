@@ -8,7 +8,11 @@ import 'package:time_tracker_flutter_course/common_widgets/show_exception_alert_
 import '../../services/database.dart';
 
 class EntryPage extends StatefulWidget {
-  const EntryPage({required this.database, required this.job, this.entry});
+  const EntryPage({
+    required this.database,
+    required this.job,
+    this.entry,
+  });
   final Database database;
   final Job job;
   final Entry? entry;

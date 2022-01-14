@@ -43,42 +43,39 @@ class JobEntriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Job>(
-        stream: database.jobStream(jobId: job.id),
-        builder: (context, snapshot) {
-          final job = snapshot.data;
-          final jobName = job?.name ?? '';
-          return Scaffold(
-            appBar: AppBar(
-              elevation: 2.0,
-              title: Text(jobName),
-              actions: <Widget>[
-                IconButton(
-                  icon: const Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => EditJobPage.show(
-                    context,
-                    database: database,
-                    job: job,
-                  ),
-                ),
-                IconButton(
-                    icon: const Icon(
-                      Icons.add,
-                      color: Colors.white,
-                    ),
-                    onPressed: () => EntryPage.show(
-                          context: context,
-                          database: database,
-                          job: job!,
-                        )),
-              ],
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 2.0,
+        title: StreamBuilder<Job>(
+          stream: database.jobStream(jobId: job.id),
+          builder: (context, snapshot) {
+            final job = snapshot.data;
+            final jobName = job?.name ?? '';
+            return Text(jobName);
+          },
+        ),
+        centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.edit, color: Colors.white),
+            onPressed: () => EditJobPage.show(
+              context,
+              database: database,
+              job: job,
             ),
-            body: _buildContent(context, job!),
-          );
-        });
+          ),
+          IconButton(
+            icon: const Icon(Icons.add, color: Colors.white),
+            onPressed: () => EntryPage.show(
+              context: context,
+              database: database,
+              job: job,
+            ),
+          ),
+        ],
+      ),
+      body: _buildContent(context, job),
+    );
   }
 
   Widget _buildContent(BuildContext context, Job job) {
@@ -89,7 +86,7 @@ class JobEntriesPage extends StatelessWidget {
           snapshot: snapshot,
           itemBuilder: (context, entry) {
             return DismissibleEntryListItem(
-              key: Key('entry-${entry.id}'),
+              dismissibleKey: Key('entry-${entry.id}'),
               entry: entry,
               job: job,
               onDismissed: () => _deleteEntry(context, entry),
